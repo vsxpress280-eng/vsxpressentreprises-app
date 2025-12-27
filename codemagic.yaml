@@ -32,3 +32,4 @@ workflows:
 
     artifacts:
       - android/app/build/outputs/**/*.apk
+
