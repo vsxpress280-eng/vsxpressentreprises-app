@@ -1,12 +1,7 @@
 import path from 'node:path';
+import fs from 'node:fs';
 import react from '@vitejs/plugin-react';
 import { createLogger, defineConfig } from 'vite';
-import inlineEditPlugin from './plugins/visual-editor/vite-plugin-react-inline-editor.js';
-import editModeDevPlugin from './plugins/visual-editor/vite-plugin-edit-mode.js';
-import iframeRouteRestorationPlugin from './plugins/vite-plugin-iframe-route-restoration.js';
-import selectionModePlugin from './plugins/selection-mode/vite-plugin-selection-mode.js';
-
-const isDev = process.env.NODE_ENV !== 'production';
 
 const configHorizonsViteErrorHandler = `
 const observer = new MutationObserver((mutations) => {
@@ -164,7 +159,7 @@ if (window.navigation && window.self !== window.top) {
 }
 `;
 
-const addTransformIndexHtml = {
+const addTransformIndexHtml = (isDev) => ({
 	name: 'add-transform-index-html',
 	transformIndexHtml(html) {
 		const tags = [
@@ -182,7 +177,7 @@ const addTransformIndexHtml = {
 			},
 			{
 				tag: 'script',
-				attrs: {type: 'module'},
+				attrs: { type: 'module' },
 				children: configHorizonsConsoleErrroHandler,
 				injectTo: 'head',
 			},
@@ -201,66 +196,102 @@ const addTransformIndexHtml = {
 		];
 
 		if (!isDev && process.env.TEMPLATE_BANNER_SCRIPT_URL && process.env.TEMPLATE_REDIRECT_URL) {
-			tags.push(
-				{
-					tag: 'script',
-					attrs: {
-						src: process.env.TEMPLATE_BANNER_SCRIPT_URL,
-						'template-redirect-url': process.env.TEMPLATE_REDIRECT_URL,
-					},
-					injectTo: 'head',
-				}
-			);
+			tags.push({
+				tag: 'script',
+				attrs: {
+					src: process.env.TEMPLATE_BANNER_SCRIPT_URL,
+					'template-redirect-url': process.env.TEMPLATE_REDIRECT_URL,
+				},
+				injectTo: 'head',
+			});
 		}
 
-		return {
-			html,
-			tags,
-		};
+		return { html, tags };
 	},
-};
+});
 
 console.warn = () => {};
 
-const logger = createLogger()
-const loggerError = logger.error
+const logger = createLogger();
+const loggerError = logger.error;
 
 logger.error = (msg, options) => {
-	if (options?.error?.toString().includes('CssSyntaxError: [postcss]')) {
-		return;
-	}
-
+	if (options?.error?.toString().includes('CssSyntaxError: [postcss]')) return;
 	loggerError(msg, options);
-}
+};
 
-export default defineConfig({
-	customLogger: logger,
-	plugins: [
-		...(isDev ? [inlineEditPlugin(), editModeDevPlugin(), iframeRouteRestorationPlugin(), selectionModePlugin()] : []),
-		react(),
-		addTransformIndexHtml
-	],
-	server: {
-		cors: true,
-		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
-		},
-		allowedHosts: true,
-	},
-	resolve: {
-		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
-		alias: {
-			'@': path.resolve(__dirname, './src'),
-		},
-	},
-	build: {
-		rollupOptions: {
-			external: [
-				'@babel/parser',
-				'@babel/traverse',
-				'@babel/generator',
-				'@babel/types'
-			]
+async function loadDevPlugins({ isDev }) {
+	// IMPORTANT: pas de plugins en CI (Codemagic)
+	const isCI = process.env.CI === 'true' || !!process.env.CODEMAGIC;
+	if (!isDev || isCI) return [];
+
+	const files = [
+		'./plugins/visual-editor/vite-plugin-react-inline-editor.js',
+		'./plugins/visual-editor/vite-plugin-edit-mode.js',
+		'./plugins/vite-plugin-iframe-route-restoration.js',
+		'./plugins/selection-mode/vite-plugin-selection-mode.js',
+	];
+
+	// Si les fichiers n'existent pas dans le repo, on ignore sans casser le build
+	for (const f of files) {
+		if (!fs.existsSync(path.resolve(__dirname, f))) {
+			return [];
 		}
 	}
+
+	try {
+		const inlineEdit = await import('./plugins/visual-editor/vite-plugin-react-inline-editor.js');
+		const editMode = await import('./plugins/visual-editor/vite-plugin-edit-mode.js');
+		const iframeRestore = await import('./plugins/vite-plugin-iframe-route-restoration.js');
+		const selectionMode = await import('./plugins/selection-mode/vite-plugin-selection-mode.js');
+
+		return [
+			inlineEdit.default(),
+			editMode.default(),
+			iframeRestore.default(),
+			selectionMode.default(),
+		];
+	} catch {
+		// sécurité: si import échoue, on ne casse pas le build
+		return [];
+	}
+}
+
+export default defineConfig(async ({ command, mode }) => {
+	const isDev = command === 'serve' || mode === 'development';
+
+	const devPlugins = await loadDevPlugins({ isDev });
+
+	return {
+		customLogger: logger,
+		plugins: [
+			...devPlugins,
+			react(),
+			addTransformIndexHtml(isDev),
+		],
+		server: {
+			cors: true,
+			headers: {
+				'Cross-Origin-Embedder-Policy': 'credentialless',
+			},
+			allowedHosts: true,
+		},
+		resolve: {
+			extensions: ['.jsx', '.js', '.tsx', '.ts', '.json'],
+			alias: {
+				'@': path.resolve(__dirname, './src'),
+			},
+		},
+		build: {
+			rollupOptions: {
+				external: [
+					'@babel/parser',
+					'@babel/traverse',
+					'@babel/generator',
+					'@babel/types',
+				],
+			},
+		},
+	};
 });
+
