@@ -1,8 +1,8 @@
 workflows:
-  android-workflow:
-    name: Android APK Build
+  android_apk_debug_macos:
+    name: Android APK Debug (macOS)
     max_build_duration: 60
-    instance_type: linux
+    instance_type: mac_mini_m1
 
     environment:
       node: 18
@@ -11,7 +11,7 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-          npm install
+          npm ci || npm install
 
       - name: Build web app
         script: |
@@ -25,11 +25,48 @@ workflows:
         script: |
           npx cap sync android
 
-      - name: Build Android APK
+      - name: Build Android APK (Debug)
         script: |
           cd android
-          ./gradlew assembleDebug
+          chmod +x ./gradlew
+          ./gradlew clean assembleDebug
 
     artifacts:
+      - android/app/build/outputs/apk/debug/*.apk
       - android/app/build/outputs/**/*.apk
 
+  android_apk_debug_linux:
+    name: Android APK Debug (Linux)
+    max_build_duration: 60
+    instance_type: linux_x2
+
+    environment:
+      node: 18
+      java: 17
+
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm ci || npm install
+
+      - name: Build web app
+        script: |
+          npm run build
+
+      - name: Ensure Android platform
+        script: |
+          npx cap add android || true
+
+      - name: Sync Capacitor
+        script: |
+          npx cap sync android
+
+      - name: Build Android APK (Debug)
+        script: |
+          cd android
+          chmod +x ./gradlew
+          ./gradlew clean assembleDebug
+
+    artifacts:
+      - android/app/build/outputs/apk/debug/*.apk
+      - android/app/build/outputs/**/*.apk
