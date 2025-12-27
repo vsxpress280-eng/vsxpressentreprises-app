@@ -1,297 +1,57 @@
-import path from 'node:path';
-import fs from 'node:fs';
-import react from '@vitejs/plugin-react';
-import { createLogger, defineConfig } from 'vite';
+import path from 'node:path'
+import react from '@vitejs/plugin-react'
+import { createLogger, defineConfig } from 'vite'
 
-const configHorizonsViteErrorHandler = `
-const observer = new MutationObserver((mutations) => {
-	for (const mutation of mutations) {
-		for (const addedNode of mutation.addedNodes) {
-			if (
-				addedNode.nodeType === Node.ELEMENT_NODE &&
-				(
-					addedNode.tagName?.toLowerCase() === 'vite-error-overlay' ||
-					addedNode.classList?.contains('backdrop')
-				)
-			) {
-				handleViteOverlay(addedNode);
-			}
-		}
-	}
-});
+const isDev = process.env.NODE_ENV !== 'production'
 
-observer.observe(document.documentElement, {
-	childList: true,
-	subtree: true
-});
-
-function handleViteOverlay(node) {
-	if (!node.shadowRoot) {
-		return;
-	}
-
-	const backdrop = node.shadowRoot.querySelector('.backdrop');
-
-	if (backdrop) {
-		const overlayHtml = backdrop.outerHTML;
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(overlayHtml, 'text/html');
-		const messageBodyElement = doc.querySelector('.message-body');
-		const fileElement = doc.querySelector('.file');
-		const messageText = messageBodyElement ? messageBodyElement.textContent.trim() : '';
-		const fileText = fileElement ? fileElement.textContent.trim() : '';
-		const error = messageText + (fileText ? ' File:' + fileText : '');
-
-		window.parent.postMessage({
-			type: 'horizons-vite-error',
-			error,
-		}, '*');
-	}
+async function loadDevPlugins() {
+  if (!isDev) return []
+  try {
+    const inlineEditPlugin = (await import('./plugins/visual-editor/vite-plugin-react-inline-editor.js')).default
+    const editModeDevPlugin = (await import('./plugins/visual-editor/vite-plugin-edit-mode.js')).default
+    const iframeRouteRestorationPlugin = (await import('./plugins/vite-plugin-iframe-route-restoration.js')).default
+    const selectionModePlugin = (await import('./plugins/selection-mode/vite-plugin-selection-mode.js')).default
+    return [
+      inlineEditPlugin(),
+      editModeDevPlugin(),
+      iframeRouteRestorationPlugin(),
+      selectionModePlugin(),
+    ]
+  } catch {
+    // Sur Codemagic (CI), si /plugins n’existe pas, on build quand même
+    return []
+  }
 }
-`;
 
-const configHorizonsRuntimeErrorHandler = `
-window.onerror = (message, source, lineno, colno, errorObj) => {
-	const errorDetails = errorObj ? JSON.stringify({
-		name: errorObj.name,
-		message: errorObj.message,
-		stack: errorObj.stack,
-		source,
-		lineno,
-		colno,
-	}) : null;
+console.warn = () => {}
 
-	window.parent.postMessage({
-		type: 'horizons-runtime-error',
-		message,
-		error: errorDetails
-	}, '*');
-};
-`;
-
-const configHorizonsConsoleErrroHandler = `
-const originalConsoleError = console.error;
-console.error = function(...args) {
-	originalConsoleError.apply(console, args);
-
-	let errorString = '';
-
-	for (let i = 0; i < args.length; i++) {
-		const arg = args[i];
-		if (arg instanceof Error) {
-			errorString = arg.stack || \`\${arg.name}: \${arg.message}\`;
-			break;
-		}
-	}
-
-	if (!errorString) {
-		errorString = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
-	}
-
-	window.parent.postMessage({
-		type: 'horizons-console-error',
-		error: errorString
-	}, '*');
-};
-`;
-
-const configWindowFetchMonkeyPatch = `
-const originalFetch = window.fetch;
-
-window.fetch = function(...args) {
-	const url = args[0] instanceof Request ? args[0].url : args[0];
-
-	// Skip WebSocket URLs
-	if (url.startsWith('ws:') || url.startsWith('wss:')) {
-		return originalFetch.apply(this, args);
-	}
-
-	return originalFetch.apply(this, args)
-		.then(async response => {
-			const contentType = response.headers.get('Content-Type') || '';
-
-			// Exclude HTML document responses
-			const isDocumentResponse =
-				contentType.includes('text/html') ||
-				contentType.includes('application/xhtml+xml');
-
-			if (!response.ok && !isDocumentResponse) {
-					const responseClone = response.clone();
-					const errorFromRes = await responseClone.text();
-					const requestUrl = response.url;
-					console.error(\`Fetch error from \${requestUrl}: \${errorFromRes}\`);
-			}
-
-			return response;
-		})
-		.catch(error => {
-			if (!url.match(/\.html?$/i)) {
-				console.error(error);
-			}
-
-			throw error;
-		});
-};
-`;
-
-const configNavigationHandler = `
-if (window.navigation && window.self !== window.top) {
-	window.navigation.addEventListener('navigate', (event) => {
-		const url = event.destination.url;
-
-		try {
-			const destinationUrl = new URL(url);
-			const destinationOrigin = destinationUrl.origin;
-			const currentOrigin = window.location.origin;
-
-			if (destinationOrigin === currentOrigin) {
-				return;
-			}
-		} catch (error) {
-			return;
-		}
-
-		window.parent.postMessage({
-			type: 'horizons-navigation-error',
-			url,
-		}, '*');
-	});
-}
-`;
-
-const addTransformIndexHtml = (isDev) => ({
-	name: 'add-transform-index-html',
-	transformIndexHtml(html) {
-		const tags = [
-			{
-				tag: 'script',
-				attrs: { type: 'module' },
-				children: configHorizonsRuntimeErrorHandler,
-				injectTo: 'head',
-			},
-			{
-				tag: 'script',
-				attrs: { type: 'module' },
-				children: configHorizonsViteErrorHandler,
-				injectTo: 'head',
-			},
-			{
-				tag: 'script',
-				attrs: { type: 'module' },
-				children: configHorizonsConsoleErrroHandler,
-				injectTo: 'head',
-			},
-			{
-				tag: 'script',
-				attrs: { type: 'module' },
-				children: configWindowFetchMonkeyPatch,
-				injectTo: 'head',
-			},
-			{
-				tag: 'script',
-				attrs: { type: 'module' },
-				children: configNavigationHandler,
-				injectTo: 'head',
-			},
-		];
-
-		if (!isDev && process.env.TEMPLATE_BANNER_SCRIPT_URL && process.env.TEMPLATE_REDIRECT_URL) {
-			tags.push({
-				tag: 'script',
-				attrs: {
-					src: process.env.TEMPLATE_BANNER_SCRIPT_URL,
-					'template-redirect-url': process.env.TEMPLATE_REDIRECT_URL,
-				},
-				injectTo: 'head',
-			});
-		}
-
-		return { html, tags };
-	},
-});
-
-console.warn = () => {};
-
-const logger = createLogger();
-const loggerError = logger.error;
+const logger = createLogger()
+const loggerError = logger.error
 
 logger.error = (msg, options) => {
-	if (options?.error?.toString().includes('CssSyntaxError: [postcss]')) return;
-	loggerError(msg, options);
-};
-
-async function loadDevPlugins({ isDev }) {
-	// IMPORTANT: pas de plugins en CI (Codemagic)
-	const isCI = process.env.CI === 'true' || !!process.env.CODEMAGIC;
-	if (!isDev || isCI) return [];
-
-	const files = [
-		'./plugins/visual-editor/vite-plugin-react-inline-editor.js',
-		'./plugins/visual-editor/vite-plugin-edit-mode.js',
-		'./plugins/vite-plugin-iframe-route-restoration.js',
-		'./plugins/selection-mode/vite-plugin-selection-mode.js',
-	];
-
-	// Si les fichiers n'existent pas dans le repo, on ignore sans casser le build
-	for (const f of files) {
-		if (!fs.existsSync(path.resolve(__dirname, f))) {
-			return [];
-		}
-	}
-
-	try {
-		const inlineEdit = await import('./plugins/visual-editor/vite-plugin-react-inline-editor.js');
-		const editMode = await import('./plugins/visual-editor/vite-plugin-edit-mode.js');
-		const iframeRestore = await import('./plugins/vite-plugin-iframe-route-restoration.js');
-		const selectionMode = await import('./plugins/selection-mode/vite-plugin-selection-mode.js');
-
-		return [
-			inlineEdit.default(),
-			editMode.default(),
-			iframeRestore.default(),
-			selectionMode.default(),
-		];
-	} catch {
-		// sécurité: si import échoue, on ne casse pas le build
-		return [];
-	}
+  if (options?.error?.toString()?.includes('CssSyntaxError: [postcss]')) return
+  loggerError(msg, options)
 }
 
-export default defineConfig(async ({ command, mode }) => {
-	const isDev = command === 'serve' || mode === 'development';
+export default defineConfig(async () => {
+  const devPlugins = await loadDevPlugins()
 
-	const devPlugins = await loadDevPlugins({ isDev });
-
-	return {
-		customLogger: logger,
-		plugins: [
-			...devPlugins,
-			react(),
-			addTransformIndexHtml(isDev),
-		],
-		server: {
-			cors: true,
-			headers: {
-				'Cross-Origin-Embedder-Policy': 'credentialless',
-			},
-			allowedHosts: true,
-		},
-		resolve: {
-			extensions: ['.jsx', '.js', '.tsx', '.ts', '.json'],
-			alias: {
-				'@': path.resolve(__dirname, './src'),
-			},
-		},
-		build: {
-			rollupOptions: {
-				external: [
-					'@babel/parser',
-					'@babel/traverse',
-					'@babel/generator',
-					'@babel/types',
-				],
-			},
-		},
-	};
-});
-
+  return {
+    customLogger: logger,
+    plugins: [...devPlugins, react()],
+    server: {
+      cors: true,
+      headers: { 'Cross-Origin-Embedder-Policy': 'credentialless' },
+      allowedHosts: true,
+    },
+    resolve: {
+      extensions: ['.jsx', '.js', '.tsx', '.ts', '.json'],
+      alias: { '@': path.resolve(__dirname, './src') },
+    },
+    build: {
+      rollupOptions: {
+        external: ['@babel/parser', '@babel/traverse', '@babel/generator', '@babel/types'],
+      },
+    },
+  }
+})
