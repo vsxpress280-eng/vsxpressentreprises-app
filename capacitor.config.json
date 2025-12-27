@@ -1,0 +1,6 @@
+{
+  "appId": "com.mrlouman.vsxpressentreprises",
+  "appName": "VS Xpress Entreprises",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
