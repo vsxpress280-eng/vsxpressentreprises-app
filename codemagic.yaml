@@ -17,6 +17,10 @@ workflows:
         script: |
           npm run build
 
+      - name: Ensure Android platform
+        script: |
+          npx cap add android || true
+
       - name: Sync Capacitor
         script: |
           npx cap sync android
