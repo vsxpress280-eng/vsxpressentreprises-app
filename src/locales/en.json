@@ -1,0 +1,494 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "welcomeChat": "Write in the chat what you want to create.",
+    "available": "Available",
+    "status": "Status",
+    "noData": "No data available",
+    "today": "Today",
+    "thisWeek": "This week",
+    "thisMonth": "This month",
+    "thisYear": "This year",
+    "all": "All",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "actions": "Actions",
+    "error": "Error",
+    "success": "Success",
+    "back": "Back",
+    "backToDashboard": "Back to dashboard",
+    "language": "Language",
+    "french": "French",
+    "english": "English",
+    "spanish": "Spanish",
+    "haitian": "Haitian Creole",
+    "navigation": "Navigation",
+    "balance": "Balance",
+    "settings": "Settings",
+    "search": "Search...",
+    "action": "Action",
+    "refresh": "Refresh",
+    "date": "Date",
+    "amount": "Amount",
+    "proof": "Proof",
+    "notes": "Notes",
+    "user": "User",
+    "agent": "Agent",
+    "worker": "Worker",
+    "beneficiary": "Beneficiary",
+    "phone": "Phone",
+    "yes": "Yes",
+    "no": "No",
+    "show": "Show",
+    "hide": "Hide",
+    "details": "Details",
+    "submit": "Submit",
+    "apply": "Apply",
+    "reset": "Reset",
+    "none": "None",
+    "unknown": "Unknown",
+    "close": "Close",
+    "download": "Download",
+    "downloading": "Downloading...",
+    "messages": "Messages",
+    "update": "Update",
+    "updating": "Updating..."
+  },
+  "header": {
+    "dashboard": "Dashboard",
+    "history": "History",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "connectedAs": "Connected as",
+    "appName": "VS XPRESS"
+  },
+  "navigation": {
+    "agent": {
+      "settings": "Settings",
+      "history": "History"
+    },
+    "worker": {
+      "settings": "Settings",
+      "profile": "Profile"
+    },
+    "deposits": "Deposits",
+    "createAccount": "Create Account",
+    "usersManager": "Users Manager",
+    "teams": "Teams Manager",
+    "transactions": "Transactions",
+    "workerManagement": "Worker Management",
+    "reassign": "Reassignment",
+    "adjustments": "Adjustments"
+  },
+  "history": {
+    "title": "History",
+    "transfers": "Transfers",
+    "deposits": "Deposits",
+    "transfersTitle": "Transfer History",
+    "depositsTitle": "Deposit History"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome",
+      "subtitle": "Sign in to your account",
+      "email": "Email",
+      "emailPlaceholder": "you@email.com",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "button": "Sign In",
+      "loading": "Signing in...",
+      "forgotPassword": "Forgot password?"
+    },
+    "changePassword": "Change Password",
+    "resetPassword": {
+      "title": "Reset Password",
+      "desc": "Enter your email to start the recovery process.",
+      "securityQuestion": "Security Question",
+      "securityAnswer": "Answer",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "button": "Reset",
+      "backToLogin": "Back to login",
+      "success": "Password reset successfully"
+    },
+    "setSecurityQuestion": {
+      "title": "Set Security Question"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your preferences and security",
+    "security": "Security",
+    "changePassword": "Change Password",
+    "changePasswordDesc": "Update your password for better security",
+    "language": "Language",
+    "appLanguage": "App Language",
+    "languageDesc": "Choose your preferred language for the interface",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password (min 8 chars)",
+    "confirmNewPassword": "Confirm New Password",
+    "passwordMismatch": "New passwords do not match.",
+    "passwordTooShort": "Password too short (min 8 characters).",
+    "invalidSession": "Invalid session, please log in again.",
+    "incorrectPassword": "Incorrect current password.",
+    "passwordUpdated": "Your password has been updated successfully.",
+    "passwordUpdateError": "Unable to update password."
+  },
+  "profile": {
+    "title": "My Profile",
+    "changePassword": "Change Password"
+  },
+  "admin": {
+    "dashboard": {
+      "globalTransactions": "GLOBAL Transactions",
+      "systemLocked": "System Locked",
+      "systemActive": "System Active",
+      "lockMessage": "All transactions are now blocked.",
+      "unlockMessage": "Transactions are reactivated.",
+      "updateError": "Error updating settings.",
+      "title": "Admin Dashboard",
+      "subtitle": "Overview and management",
+      "stats": {
+        "pendingDeposits": "Pending Deposits",
+        "totalTransfers": "Total Transfers",
+        "activeUsers": "Active Users",
+        "totalTeams": "Total Teams"
+      },
+      "alert": {
+        "pendingDeposits": "There are {{count}} deposit(s) pending validation."
+      },
+      "quickActions": "Quick Actions",
+      "review": "Review"
+    }
+  },
+  "deposits": {
+    "validation": {
+      "title": "Deposit Validation",
+      "subtitle": "Click a row to view details, validate/reject, and see proof."
+    },
+    "detail": {
+      "title": "Deposit Detail",
+      "subtitle": "Summary + actions (validate / reject / proof)"
+    },
+    "proof": {
+      "title": "Payment Proof",
+      "help": "If nothing shows, it's often empty `proof_url` or a private bucket."
+    },
+    "noProof": "No proof",
+    "viewProof": "View Proof",
+    "validate": "Validate",
+    "reject": "Reject",
+    "status": {
+      "validated": "Validated",
+      "rejected": "Rejected"
+    },
+    "error": {
+      "load": "Unable to load deposits",
+      "noProofUrl": "This deposit has no proof_url.",
+      "proofLoad": "Unable to display proof."
+    }
+  },
+  "users": {
+    "manager": {
+      "title": "User Management",
+      "total": "Total users",
+      "search": "Search...",
+      "filterByRole": "Filter by role",
+      "viewEdit": "View / Edit"
+    },
+    "table": {
+      "fullName": "Full Name",
+      "role": "Role",
+      "assignedWorker": "Assigned Worker",
+      "creditLimit": "Credit Limit",
+      "balance": "Balance",
+      "actions": "Actions"
+    }
+  },
+  "worker": {
+    "reassignment": {
+      "title": "Reassignment",
+      "help": "Use this tool to move all pending transfers from one worker to another. Useful for unavailability.",
+      "source": "Source Worker",
+      "destination": "Destination Worker",
+      "pendingCount": "Pending Transfers",
+      "button": "Reassign",
+      "sameWorkerError": "Source and destination must be different",
+      "success": "{{count}} transfers reassigned successfully",
+      "pendingTransfers": "Pending Transfers",
+      "sourceWorker": "Source Worker",
+      "destinationWorker": "Destination Worker",
+      "reassign": "Reassign"
+    },
+    "adjustments": {
+      "title": "Adjustments",
+      "proposed": "Proposed",
+      "accepted": "Accepted",
+      "refused": "Refused",
+      "actionDone": "Action completed",
+      "accept": "Accept",
+      "reject": "Reject",
+      "alreadyProcessed": "Already processed"
+    },
+    "stats": {
+      "volume": "Volume",
+      "successRate": "Success",
+      "totalCompleted": "Total Completed",
+      "pending": "Pending",
+      "rejected": "Rejected / Cancelled",
+      "advanced": "Advanced Details",
+      "cumulative": "Cumulative Total"
+    },
+    "filter": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year",
+      "custom": "Custom",
+      "all": "All",
+      "customRange": "Custom Range",
+      "start": "Start",
+      "end": "End",
+      "apply": "Apply"
+    },
+    "export": {
+      "title": "Download",
+      "processing": "Downloading...",
+      "ready": "Download Ready",
+      "countExported": "{{count}} transfers exported.",
+      "error": "Export Error",
+      "invalidRange": "Invalid Range"
+    }
+  },
+  "agent": {
+    "dashboard": {
+      "title": "Agent Dashboard",
+      "subtitle": "Manage your transfers",
+      "balance": "Current Balance",
+      "balanceRate": "Balance Rate",
+      "credit": "Credit",
+      "recentTransfers": "Recent Transfers",
+      "viewAll": "View All",
+      "actions": {
+        "createTransfer": "New Transfer",
+        "makeDeposit": "Make Deposit",
+        "history": "History"
+      },
+      "status": {
+        "negative": "Negative",
+        "ok": "OK"
+      }
+    }
+  },
+  "transfer": {
+    "create": {
+      "title": "Create Transfer",
+      "subtitle": "Make a new money transfer",
+      "senderInfo": "Sender Information",
+      "receiverInfo": "Receiver Information",
+      "amountUSD": "Transfer Amount (USD)",
+      "fullName": "Full Name",
+      "phone": "Phone",
+      "notes": "Notes (Optional)",
+      "button": "Create Transfer",
+      "processing": "Creating...",
+      "successTitle": "Transfer Created",
+      "successDesc": "The transfer has been created and is pending validation"
+    },
+    "detail": {
+      "title": "Transfer Details",
+      "backHistory": "Back to history",
+      "backTransfers": "Back to transfers",
+      "amountSent": "Amount Sent",
+      "totalReceive": "Total to receive",
+      "proofAgent": "Proof (Agent)",
+      "clickToView": "Click to view",
+      "cancelRequest": "Request Cancellation",
+      "cancelReason": "Cancellation Reason",
+      "cancelPrompt": "Please indicate the reason for this request.",
+      "validation": "Validation",
+      "cancelRequestedAlert": "The agent requested cancellation. Validate to complete or Reject to cancel.",
+      "proofRequired": "Payment Proof (Required)",
+      "addProof": "Click to add proof",
+      "changeProof": "Change",
+      "beneficiary": "Beneficiary",
+      "phone": "Phone",
+      "date": "Date",
+      "agent": "Agent",
+      "proof": "Proof",
+      "notes": "Notes"
+    },
+    "messages": {
+      "title": "Discussion",
+      "hide": "Hide",
+      "show": "Show"
+    },
+    "action": {
+      "validate": "Validate",
+      "reject": "Reject"
+    }
+  },
+  "status": {
+    "all": "All",
+    "pending": "Pending",
+    "approved": "Approved",
+    "validated": "Validated",
+    "rejected": "Rejected",
+    "cancelled": "Cancelled",
+    "cancel_requested": "Cancellation Requested",
+    "en_attente": "Pending",
+    "processing": "Processing",
+    "in_progress": "In Progress"
+  },
+  "error": {
+    "fetchFailed": "Failed to load data",
+    "transaction": {
+      "checkFailed": "Unable to check transaction status.",
+      "disabled": "Transactions are temporarily disabled by the administrator."
+    },
+    "unexpected": "Unexpected error.",
+    "file": {
+      "tooLarge": "File too large (max 5MB)"
+    },
+    "upload": {
+      "failed": "Failed to upload proof."
+    }
+  },
+  "pages": {
+    "profile": {
+      "title": "My Profile",
+      "changePassword": "Change Password"
+    },
+    "usersManager": {
+      "title": "User Management",
+      "totalUsers": "Total users",
+      "search": "Search...",
+      "filterByRole": "Filter by role",
+      "viewEdit": "View / Edit"
+    },
+    "workerReassignment": {
+      "title": "Reassignment",
+      "sourceWorker": "Source Worker",
+      "destinationWorker": "Destination Worker",
+      "pendingTransfers": "Pending Transfers",
+      "reassign": "Reassign"
+    },
+    "transferDetail": {
+      "title": "Transfer Details",
+      "beneficiary": "Beneficiary",
+      "phone": "Phone",
+      "date": "Date",
+      "amountSent": "Amount Sent",
+      "totalToReceive": "Total to receive",
+      "proof": "Proof",
+      "notes": "Notes",
+      "agent": "Agent"
+    },
+    "workerTransfers": {
+      "title": "Transfers"
+    },
+    "workerAdjustments": {
+      "title": "Adjustments"
+    }
+  },
+  "forms": {
+    "creditLimit": "Credit Limit",
+    "beneficiaryName": "Beneficiary Name",
+    "phoneNumber": "Phone Number",
+    "operator": "Operator",
+    "assignedWorker": "Assigned Worker",
+    "selectWorker": "Select a worker"
+  },
+  "tables": {
+    "agent": "Agent",
+    "amountRD": "Amount RD$",
+    "amountHTG": "Amount HTG",
+    "date": "Date",
+    "actions": "Actions",
+    "fullName": "Full Name",
+    "role": "Role",
+    "creditLimit": "Credit Limit",
+    "balance": "Balance"
+  },
+  "buttons": {
+    "back": "Back",
+    "backToDashboard": "Back to dashboard",
+    "backToHistory": "Back to history",
+    "backToTransfers": "Back to transfers",
+    "validate": "Validate",
+    "reject": "Reject",
+    "cancelRequest": "Request Cancellation"
+  },
+  "chat": {
+    "title": "Discussion",
+    "closed": "Closed",
+    "noMessages": "No messages",
+    "placeholder": "Write a message...",
+    "conversationClosed": "Conversation closed"
+  },
+  "dashboard": {
+    "admin": {
+      "title": "Admin Dashboard",
+      "subtitle": "Overview and management",
+      "stats": {
+        "pendingDeposits": "Pending Deposits",
+        "totalTransfers": "Total Transfers",
+        "activeUsers": "Active Users",
+        "totalTeams": "Total Teams"
+      },
+      "alert": {
+        "pendingDeposits": "There are {{count}} deposit(s) pending validation."
+      },
+      "quickActions": "Quick Actions",
+      "review": "Review"
+    },
+    "agent": {
+      "title": "Agent Dashboard",
+      "subtitle": "Manage your transfers",
+      "balance": "Current Balance",
+      "credit": "Credit",
+      "recentTransfers": "Recent Transfers",
+      "viewAll": "View All",
+      "actions": {
+        "createTransfer": "New Transfer",
+        "makeDeposit": "Make Deposit",
+        "history": "History"
+      }
+    },
+    "worker": {
+      "title": "Worker Dashboard",
+      "balanceHtg": "Available Balance",
+      "pendingTransfers": "Pending Transfers",
+      "viewHistory": "History",
+      "adjustments": "View Adjustments",
+      "transfersTitle": "Stats",
+      "volume": "Volume",
+      "successRate": "Success",
+      "stats": {
+        "personal": "Advanced Details"
+      }
+    }
+  },
+  "messages": {
+    "validationError": "Validation error. Please check your information.",
+    "invalidCredentials": "Incorrect email or password.",
+    "confirmCancel": "Are you sure you want to request cancellation?",
+    "transferRefused": "Transfer refused",
+    "transferValidated": "Transfer validated successfully. Your wallet has been credited.",
+    "fileTooLarge": "File too large",
+    "invalidFileType": "Invalid file type",
+    "transfersReassigned": "{{count}} transfers reassigned successfully",
+    "adjustmentAccepted": "Adjustment accepted",
+    "adjustmentRefused": "Adjustment refused",
+    "fillAllFields": "Fill all fields.",
+    "passwordMismatch": "New passwords do not match.",
+    "passwordTooShort": "Password too short (min 8 characters).",
+    "passwordUpdated": "Password updated",
+    "passwordUpdatedDesc": "Your password has been changed successfully.",
+    "errorTitle": "Error",
+    "updating": "Updating..."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "auth": {
+    "login": {
+      "title": "Connexion à votre compte",
+      "subtitle": "Accédez à votre tableau de bord",
+      "email": "Adresse e-mail",
+      "emailPlaceholder": "exemple@email.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "••••••••",
+      "button": "Se connecter",
+      "forgotPassword": "Mot de passe oublié ?",
+      "signUp": "Créer un compte",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "loading": "Connexion en cours...",
+      "demoAccess": "Accès Démo",
+      "adminCreds": "Utiliser identifiants Admin"
+    }
+  },
+  "header": {
+    "appName": "VS XPRESS",
+    "connectedAs": "Connecté en tant que",
+    "dashboard": "Tableau de bord",
+    "profile": "Profil",
+    "logout": "Déconnexion",
+    "history": "Historique",
+    "settings": "Paramètres"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "transfers": "{{count}} transfert(s) en attente",
+    "deposits": "{{count}} dépôt(s) en attente",
+    "adjustments": "{{count}} régularisation(s) en attente",
+    "empty": "Aucune nouvelle notification"
+  },
+  "pages": {
+    "agentDashboard": {
+      "title": "Tableau de bord Agent",
+      "subtitle": "Gérez vos transferts",
+      "balance": "Solde actuel",
+      "recentTransfers": "Transferts récents",
+      "viewAll": "Voir tout"
+    }
+  },
+  "common": {
+    "available": "Disponible",
+    "credit": "Crédit",
+    "status": "Statut",
+    "ok": "OK",
+    "yes": "Oui",
+    "no": "Non",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "loading": "Chargement...",
+    "action": "Action requise"
+  }
+}

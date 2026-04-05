@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "5326451146",
+    "project_id": "vs-express-entreprises",
+    "storage_bucket": "vs-express-entreprises.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5326451146:android:ecec980cf64c4b17b45f33",
+        "android_client_info": {
+          "package_name": "com.vsxpress.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwuV43WV7RCAVo9qAKS4FHQmQpno50wW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5326451146:android:a4130cad7de9dfbeb45f33",
+        "android_client_info": {
+          "package_name": "com.vsxpress.entreprises"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwuV43WV7RCAVo9qAKS4FHQmQpno50wW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5326451146:android:a3bda3d4c3e1f666b45f33",
+        "android_client_info": {
+          "package_name": "com.vsxpressentreprises.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwuV43WV7RCAVo9qAKS4FHQmQpno50wW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

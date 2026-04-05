@@ -1,0 +1,47 @@
+{
+  "phase": "0",
+  "status": "VERIFIED",
+  "timestamp": "2025-12-26T12:00:00Z",
+  "checks": {
+    "client_configuration": {
+      "file": "src/lib/supabase.js",
+      "status": "PASSED",
+      "details": "Client initialized with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY. Auth persistence enabled."
+    },
+    "edge_functions": [
+      { "name": "create-admin-account", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "create-agent-account", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "create-worker", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "create-special-agent", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "validate-transfer", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "approve-adjustment", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "propose-adjustment", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "submit-deposit", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "request-cancellation", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" },
+      { "name": "get-worker-stats", "status": "EXISTS", "cors": "VERIFIED", "env_vars": "VERIFIED" }
+    ],
+    "database_schema": {
+      "public.users": {
+        "status": "PASSED",
+        "columns_verified": ["id", "email", "role", "nom", "prenom", "numero", "associated_worker", "status", "created_at", "updated_at"]
+      },
+      "public.wallets": {
+        "status": "PASSED",
+        "columns_verified": ["user_id", "balance_htg", "balance", "credit_limit"]
+      },
+      "public.transfers": {
+        "status": "PASSED",
+        "columns_verified": ["id", "agent_id", "worker_id", "amount_dop", "status", "proof_url", "created_at"]
+      },
+      "public.worker_adjustments": {
+        "status": "PASSED",
+        "columns_verified": ["id", "worker_id", "admin_id", "montant", "statut", "created_at"]
+      }
+    }
+  },
+  "issues_found": [],
+  "recommendations": [
+    "Ensure 'public.worker_adjustments' table policies allow admins to insert and workers to read.",
+    "Verify 'public.users' RLS policies to allow authenticated users to read their own data."
+  ]
+}
